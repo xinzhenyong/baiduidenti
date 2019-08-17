@@ -17,7 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.OnResultListener;
+import com.baidu.ocr.sdk.exception.OCRError;
+import com.baidu.ocr.sdk.model.AccessToken;
 import com.baidu.ocr.sdk.model.BankCardResult;
 import baidu.ocr.ui.camera.CameraActivity;
 import baidu.ocr.ui.camera.PermissionCallback;
@@ -60,6 +63,18 @@ public class BankPhoto implements ActivityEventListener {
             return false;
         }
     };
+    public void regist(String ak,String sk){
+      OCR.getInstance(mActivity.get().getApplicationContext()).initAccessTokenWithAkSk(new OnResultListener<AccessToken>() {
+        @Override
+        public void onResult(AccessToken result) {
+          String token = result.getAccessToken();
+        }
+        @Override
+        public void onError(OCRError error) {
+          error.printStackTrace();
+        }
+      }, mActivity.get().getApplicationContext(),  ak, sk);
+    }
     public void photo(Promise promise){
         this.promise=promise;
         Intent intent = new Intent(mActivity.get(), CameraActivity.class);

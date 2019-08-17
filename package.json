@@ -1,7 +1,7 @@
 
 {
-  "name": "react-native-bdidentifi",
-  "version": "1.0.6",
+  "name": "@1ziton/react-native-bdidentifi",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {

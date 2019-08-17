@@ -19,6 +19,10 @@ public class PhotoModule extends ReactContextBaseJavaModule{
     public String getName() {
         return "BankPhoto";
     }
+  @ReactMethod
+  public  void regist(String ak,String sk) {
+    getBankPhoto().regist(ak,sk);
+  }
     @ReactMethod
     public  void photo(final Promise successCallback) {
         getBankPhoto().photo(successCallback);

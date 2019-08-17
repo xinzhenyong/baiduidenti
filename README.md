@@ -1,13 +1,13 @@
-
-# react-native-bdidentifi
-
+﻿
+# react-native-1ziton-bdidentifi
+# 百度银行卡号码识别组件
 ## Getting started
 
-`$ npm install react-native-bdidentifi --save`
+`$ npm install @1ziton/react-native-bdidentifi --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-bdidentifi`
+`$ react-native link @1ziton/react-native-bdidentifi`
 
 ### Manual installation
 
@@ -21,9 +21,9 @@
 
 #### Android
 
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.1ziton.bdidentifi.RNBdidentifiPackage;` to the imports at the top of the file
-  - Add `new RNBdidentifiPackage()` to the list returned by the `getPackages()` method
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
+  - Add `import com.ziton.bdidentifi.BankPhotoReactPackage;` to the imports at the top of the file
+  - Add `new BankPhotoReactPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-bdidentifi'
@@ -43,13 +43,14 @@ import {
 const { BankPhoto } = NativeModules;
 ```
      if (Platform.OS === 'android') {
+      BankPhoto.regist('yourak', 'yoursk');
       BankPhoto.photo()
         .then((result) => {
           const bankEntity = JSON.parse(result);
           this.setState({
-            bankCode: bankEntity.BankCardNumber,
-            bankName: bankEntity.BankName,
-            bankLineNum: bankEntity.BankCardType
+            bankCode: bankEntity.BankCardNumber,//银行卡号
+            bankName: bankEntity.BankName,//银行卡名称
+            bankLineNum: bankEntity.BankCardType//银行行号
           });
         })
         .catch((error) => {
@@ -58,3 +59,4 @@ const { BankPhoto } = NativeModules;
           });
         });
     } 
+```
