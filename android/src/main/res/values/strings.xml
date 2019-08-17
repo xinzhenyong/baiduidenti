@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">小智哥</string>
     <string name="bank_tip">请核对卡号信息，确认无误</string>
+  <string name="camera_permission_required">本功能需要相机权限！</string>
 </resources>

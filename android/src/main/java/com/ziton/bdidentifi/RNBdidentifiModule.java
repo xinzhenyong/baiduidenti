@@ -1,5 +1,5 @@
 
-package com.1ziton.bdidentifi;
+package com.ziton.bdidentifi;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

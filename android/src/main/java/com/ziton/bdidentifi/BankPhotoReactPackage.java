@@ -1,4 +1,4 @@
-package com.dashixiong.baiduIdentifi;
+package com.ziton.bdidentifi;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

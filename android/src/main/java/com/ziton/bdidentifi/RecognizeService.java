@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
  */
-package com.dashixiong.baiduIdentifi;
+package com.ziton.bdidentifi;
 
 import android.content.Context;
 

@@ -1,5 +1,5 @@
 
-package com.1ziton.bdidentifi;
+package com.ziton.bdidentifi;
 
 import java.util.Arrays;
 import java.util.Collections;

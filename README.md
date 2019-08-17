@@ -37,9 +37,24 @@
 
 ## Usage
 ```javascript
-import RNBdidentifi from 'react-native-bdidentifi';
-
-// TODO: What to do with the module?
-RNBdidentifi;
+import {
+  NativeModules
+} from 'react-native';
+const { BankPhoto } = NativeModules;
 ```
-  
+     if (Platform.OS === 'android') {
+      BankPhoto.photo()
+        .then((result) => {
+          const bankEntity = JSON.parse(result);
+          this.setState({
+            bankCode: bankEntity.BankCardNumber,
+            bankName: bankEntity.BankName,
+            bankLineNum: bankEntity.BankCardType
+          });
+        })
+        .catch((error) => {
+          this.setState({
+            result: JSON.parse(error)
+          });
+        });
+    } 

@@ -1,4 +1,4 @@
-package com.dashixiong.baiduIdentifi;
+package com.ziton.bdidentifi;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

@@ -1,4 +1,4 @@
-package com.dashixiong.baiduIdentifi;
+package com.ziton.bdidentifi;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,8 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.baidu.ocr.sdk.model.BankCardResult;
-import com.baidu.ocr.ui.camera.CameraActivity;
-import com.baidu.ocr.ui.camera.PermissionCallback;
+import baidu.ocr.ui.camera.CameraActivity;
+import baidu.ocr.ui.camera.PermissionCallback;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 
@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import com.dashixiong.R;
+import com.ziton.bdidentifi.R;
 
 public class BankPhoto implements ActivityEventListener {
     private static final int REQUEST_CODE_BANKCARD = 111;
@@ -137,7 +137,7 @@ public class BankPhoto implements ActivityEventListener {
         mActivity.get().runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
-                      Dialog dialog = new Dialog(mActivity.get());
+                      final Dialog dialog = new Dialog(mActivity.get());
                       View contentView = LayoutInflater.from(mActivity.get()).inflate(R.layout.bank_card_info,null);
                       ImageView cancelImage = contentView.findViewById(R.id.cancel);
                       ImageView bankCardPic = contentView.findViewById(R.id.bankCardPic);
