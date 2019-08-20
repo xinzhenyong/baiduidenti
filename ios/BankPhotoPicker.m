@@ -39,7 +39,6 @@
 
 - (void)getBankNumOperation
 {
-  [[AipOcrService shardService] authWithAK:@"TwWXBRMjOphxP0axV6BGjgV8" andSK:@"3Kjmcih1wlF7INGgY6MG1s4M1uuy7Nyo"];
   NSLog(@"获取银行卡号");
   [self bankCardOCROnline];
   

@@ -9,7 +9,7 @@
 
 #import "RNBdidentifi.h"
 #import "BankPhotoPicker.h"
-
+#import <AipOcrSdk/AipOcrSdk.h>
 NSString *const kBankInfoEventName = @"BankInfoEventName";
 
 @interface RNBdidentifi ()
@@ -73,7 +73,13 @@ RCT_EXPORT_MODULE(BankPhoto);
 - (NSArray<NSString *> *)supportedEvents {
     return @[kBankInfoEventName];
 }
-
+//注册
+RCT_EXPORT_METHOD(regist:(NSString*)accessKey
+                  SecretKey:(NSString*)secretKey
+                  ){
+    NSLog(@"%@;%@",accessKey,secretKey);
+    [[AipOcrService shardService] authWithAK:accessKey andSK:secretKey];
+}
 // 接收传过来
 RCT_REMAP_METHOD(photo, resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)reject){
     _resolveBlock=resolver;
