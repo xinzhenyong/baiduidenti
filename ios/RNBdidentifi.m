@@ -13,6 +13,10 @@
 NSString *const kBankInfoEventName = @"BankInfoEventName";
 
 @interface RNBdidentifi ()
+{
+    RCTPromiseResolveBlock _resolveBlock;
+    RCTPromiseRejectBlock _rejectBlock;
+}
 @property(strong,nonatomic)BankPhotoPicker *bankPhotoPicker;
 @end
 
@@ -52,7 +56,17 @@ RCT_EXPORT_MODULE(BankPhoto);
 - (void)sendBankPhotoEvent:(NSNotification *)noti {
     NSDictionary *infoDic = noti.userInfo;
     NSLog(@"发给RN的infoDic字符串为%@",infoDic);
-    [self sendEventWithName:kBankInfoEventName body:infoDic];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDic options:NSJSONWritingPrettyPrinted error:&error];
+    NSString*jsonString=[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    if (jsonString) {
+        _resolveBlock(jsonString);
+    }
+    else{
+        NSLog(@"发给RN的infoDic字符串为%@",noti);
+//        _rejectBlock(noti);
+    }
+//    [self sendEventWithName:kBankInfoEventName body:infoDic];
 }
 
 // 重写方法，定义支持的事件集合
@@ -61,7 +75,9 @@ RCT_EXPORT_MODULE(BankPhoto);
 }
 
 // 接收传过来
-RCT_EXPORT_METHOD(bankNumOperation){
+RCT_REMAP_METHOD(photo, resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)reject){
+    _resolveBlock=resolver;
+    _rejectBlock=reject;
     UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     while (root.presentedViewController != nil) {
         root = root.presentedViewController;

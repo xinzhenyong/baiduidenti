@@ -67,13 +67,13 @@
     
     NSString *card = result[@"result"][@"bank_card_number"];
     card = [card stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSString *bankNum = card;
-    NSString *bankName = result[@"result"][@"bank_name"];
+    __block NSString *bankNum = card;
+    __block NSString *bankName = result[@"result"][@"bank_name"];
     NSLog(@"默认识别成功的card为%@", card);
     NSLog(@"默认识别成功的bankName为%@", bankName);
     
     //发送银行卡卡号信息通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"sendBankPhotoEventNotification" object:nil userInfo:@{@"bankNum":bankNum,@"bankName":bankName}];
+//      [[NSNotificationCenter defaultCenter] postNotificationName:@"sendBankPhotoEventNotification" object:nil userInfo:@{@"BankCardNumber":bankNum,@"BankName":bankName,@"BankCardType":@""}];
     
     [[AipOcrService shardService] detectTextAccurateFromImage:cardImage withOptions:nil successHandler:^(id result) {
       
@@ -82,50 +82,53 @@
       for (NSDictionary *d in locas)
       {
         NSDictionary *locaD = d[@"location"];
-        
-        NSLog(@"locaD%@:%@",d[@"words"],locaD);
-        
-        if ([card isEqualToString:d[@"words"]])
-        {
-          
-          CGFloat x = [locaD[@"left"] floatValue];
-          CGFloat y = [locaD[@"top"] floatValue];
-          CGFloat width = [locaD[@"width"] floatValue];
-          CGFloat height = [locaD[@"height"] floatValue];
-          
-          if (_successHandler != nil)
-          {
-            _successHandler(result);
+          if([((NSString*)d[@"words"]) hasSuffix:@"银行"]&&[bankName isEqualToString:@""]  ){
+              bankName=d[@"words"];
           }
-          
-          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            //发送银行卡卡号信息通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"sendBankPhotoEventNotification" object:nil userInfo:@{@"bankNum":bankNum,@"bankName":bankName}];
-            
-            UIViewController *topRootViewController = [[UIApplication  sharedApplication] keyWindow].rootViewController;
-            
-            // 在这里加一个这个样式的循环
-            while (topRootViewController.presentedViewController)
-            {
-              // 这里固定写法
-              topRootViewController = topRootViewController.presentedViewController;
-            }
-            
-            [topRootViewController dismissViewControllerAnimated:YES completion:^{
-              NSLog(@"bankPhotoPicker退出");
-            }];
-          }];
-          
-          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [ShowBankCardView showBankCardWithBankCard:card bankCardImage:[self imageByCroppingWithImage:cardImage cropRect:CGRectMake(x, y, width, height)] btnEventHandler:nil];
-             
-          });
-          
-        }
+        NSLog(@"locaD%@:%@",d[@"words"],locaD);
+          if([self deptNumInputShouldNumber:d[@"words"]]&&((NSString*)d[@"words"]).length>8){
+               bankNum=card.length>((NSString*)d[@"words"]).length?card:d[@"words"];
+                  CGFloat x = [locaD[@"left"] floatValue];
+                  CGFloat y = [locaD[@"top"] floatValue];
+                  CGFloat width = [locaD[@"width"] floatValue];
+                  CGFloat height = [locaD[@"height"] floatValue];
+              
+                  if (_successHandler != nil)
+                  {
+                      _successHandler(result);
+                  }
+                  
+                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                     
+                      //发送银行卡卡号信息通知
+                      [[NSNotificationCenter defaultCenter] postNotificationName:@"sendBankPhotoEventNotification" object:nil userInfo:@{@"BankCardNumber":bankNum,@"BankName":bankName,@"BankCardType":@""}];
+                      
+                      UIViewController *topRootViewController = [[UIApplication  sharedApplication] keyWindow].rootViewController;
+                      
+                      // 在这里加一个这个样式的循环
+                      while (topRootViewController.presentedViewController)
+                      {
+                          // 这里固定写法
+                          topRootViewController = topRootViewController.presentedViewController;
+                      }
+                      
+                      [topRootViewController dismissViewControllerAnimated:YES completion:^{
+                          NSLog(@"bankPhotoPicker退出");
+                      }];
+                  }];
+                  
+                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                      [ShowBankCardView showBankCardWithBankCard:bankNum bankCardImage:[self imageByCroppingWithImage:cardImage cropRect:CGRectMake(x, y, width, height)] btnEventHandler:nil];
+                      
+                  });
+              
+          }
+        
       }
       
-    } failHandler:nil];
+    } failHandler:^(NSError *err){
+        NSLog(@"err:%@",err.domain);
+    }];
     
   } failHandler:_failHandler];
 }
@@ -197,8 +200,19 @@
   [topRootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-
+//工具方法，判断是否是数字
+- (BOOL) deptNumInputShouldNumber:(NSString *)str
+{
+    if (str.length == 0) {
+        return NO;
+    }
+    NSString *regex = @"[0-9]*";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    if ([pred evaluateWithObject:str]) {
+        return YES;
+    }
+    return NO;
+}
 @end
 
 
