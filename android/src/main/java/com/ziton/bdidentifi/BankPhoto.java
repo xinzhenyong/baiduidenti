@@ -161,9 +161,12 @@ public class BankPhoto implements ActivityEventListener {
                       final EditText editNumT = contentView.findViewById(R.id.editNumT);
                       Button determin = contentView.findViewById(R.id.determin);
                       String cardNum = result.getBankCardNumber().replace(" ","");
+                      if(cardNum.length() > 7)
                       editNumF.setText(cardNum.substring(0,7));
-                      editNumS.setText(cardNum.substring(7,13));
-                      editNumT.setText(cardNum.substring(13,cardNum.length()));
+                      if(cardNum.length() >= 13){
+                        editNumS.setText(cardNum.substring(7,13));
+                        editNumT.setText(cardNum.substring(13,cardNum.length()));
+                      }
                       showPic(bankCardPic);
                       cancelImage.setOnClickListener(new View.OnClickListener() {
                           @Override
